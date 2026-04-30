@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: gray;
+}
+
+body {
+  background-color: azure;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* row-gap: 20px; */
+  padding: 10px;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.main_container {
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.2);
+  min-width: 300px;
+  width: 600px;
+  display: block;
+  padding: 10px;
+}
+
+button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 0px solid #ffffff;
+  color: black;
+  font-size: 22px;
+  /* font-weight: bold; */
+  cursor: pointer;
+}
+
+button.new {
+  background-color: rgb(109, 170, 231);
+  color: white;
+  font-weight: bold;
+  align-self: flex-start;
+  box-shadow: 0 5px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+#todos {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  margin-top: 50px;
+}
+.todo_style {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  background-color: rgb(193, 223, 205);
+  padding: 10px;
+  border-radius: 6px;
+  min-width: 400px;
+}
+
+.todo_style > input[type='checkbox'] {
+  cursor: pointer;
+  font-size: 20px;
+  width: 20px;
+}
+
+.todo_style > input[type='text'] {
+  flex-grow: 1;
+}
+
+.todo_style > button {
+  padding: 1px 8px;
+}
