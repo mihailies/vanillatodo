@@ -1,0 +1,6 @@
+{
+  "port": 9999,
+  "ignore": "node_modules",
+  "noBrowser": false,
+  "wait": 1000
+}

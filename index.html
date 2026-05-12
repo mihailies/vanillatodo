@@ -1,19 +1,36 @@
 <!doctype html>
 <html>
   <head>
+    <script
+      type="text/javascript"
+      src="./node_modules/lodash/lodash.js"
+      defer
+    ></script>
     <script type="text/javascript" src="index.js" defer></script>
+
     <link href="style.css" rel="stylesheet" />
   </head>
 
   <body>
-    <button class="new" onclick="newTodo()">New TODO</button>
     <div class="main_container">
-      <h1>TODO LIST APP 1</h1>
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          padding: 10px;
+        "
+      >
+        <h1>TODOs</h1>
+        <button class="new" onclick="newTodo()">New TODO</button>
+      </div>
+      <hr style="margin-bottom: 10px" />
+
+      <div id="todos_active"></div>
     </div>
     <div class="main_container">
-      <h1>TODO LIST APP</h1>
+      <h1>Done TODOs</h1>
+      <div id="todos_done"></div>
     </div>
-    <div id="todos"></div>
-    <div id="done_todos"></div>
   </body>
 </html>
