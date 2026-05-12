@@ -1,4 +1,6 @@
-// todos list is Array
+'use strict';
+const LOCAL_STORAGE_ID = 'my_todos';
+
 let todosSaved = [
   { id: crypto.randomUUID(), text: 'one task', done: false },
   { id: crypto.randomUUID(), text: '3 one task', done: true },
@@ -50,18 +52,19 @@ function newTodo(todoData, container) {
     value: todoData.text != undefined ? todoData.text : '',
     type: 'text',
     onchange: (evt) => {
-      changeTodoText(evt.target.dataId, evt.target.value);
+      changeTodoText(evt.target.dataset.id, evt.target.value);
     },
   });
+  todoText.dataset.id = todoData.id;
 
   let deleteButton = document.createElement('button');
   Object.assign(deleteButton, {
-    dataId: todoData.id,
     innerHTML: 'x',
     onclick: () => {
       deleteTodo(todoData.id);
     },
   });
+  deleteButton.dataset.id = todoData.id;
   newTodo.appendChild(checkBox);
   newTodo.appendChild(todoText);
   newTodo.appendChild(deleteButton);
@@ -105,3 +108,10 @@ function deleteTodo(id) {
 //     newTodo(todo, todo.done ? todosDone : todosActive);
 //   }
 // }
+
+function loadFromLocalStorage() {
+  todosSaved = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_ID)) || [];
+}
+function saveToLocalStorage() {
+  window.localStorage.setItem(LOCAL_STORAGE_ID, todosSaved);
+}
