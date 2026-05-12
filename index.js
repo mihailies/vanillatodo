@@ -5,8 +5,8 @@ let todosSaved = [
   { id: crypto.randomUUID(), text: '4 one task', done: false },
 ];
 
-let todosActive;
-let todosDone;
+let todosActiveContainerDiv;
+let todosDoneContainerDiv;
 
 let bodyOnLoadPromise = new Promise((resolve) => {
   document.body.onload = () => {
@@ -16,17 +16,18 @@ let bodyOnLoadPromise = new Promise((resolve) => {
 
 (async () => {
   await bodyOnLoadPromise.then((val) => console.log(val));
-  todosActive = document.getElementById('todos_active');
-  todosDone = document.getElementById('todos_done');
+  todosActiveContainerDiv = document.getElementById('todos_active');
+  todosDoneContainerDiv = document.getElementById('todos_done');
   for (let todo of todosSaved) {
-    newTodo(todo, todo.done ? todosDone : todosActive);
+    newTodo(todo, todo.done ? todosDoneContainerDiv : todosActiveContainerDiv);
   }
 })();
 
 function newTodo(todoData, container) {
   if (todoData == undefined) {
-    todoData = { id: crypto.randomUUID() };
-    container = todosActive;
+    todoData = { id: crypto.randomUUID(), done: false, text: '...' };
+    todosSaved.unshift(todoData);
+    container = todosActiveContainerDiv;
   }
 
   let newTodo = document.createElement('div');
@@ -40,6 +41,7 @@ function newTodo(todoData, container) {
     dataId: todoData.id,
     type: 'checkbox',
     checked: todoData.done ? true : false,
+    onchange: () => setDoneTodo(todoData.id),
   });
 
   let todoText = document.createElement('input');
@@ -76,12 +78,25 @@ function changeTodoText(id, value) {
   todosSaved.find((todo) => todo.id == id).text = value;
 }
 
+function setDoneTodo(id) {
+  // debugger;
+  let todo = todosSaved.find((todo) => todo.id == id);
+  todo.done = !todo.done;
+  let todoNode = document.querySelector(`[data-id="${id}"]`);
+  if (todo.done) {
+    todosDoneContainerDiv.appendChild(todoNode);
+  } else {
+    todosActiveContainerDiv.appendChild(todoNode);
+  }
+}
+
 function deleteTodo(id) {
   todosSaved = todosSaved.filter((el) => el.id != id);
-  console.log(document.querySelector('[data-id="' + id + '"]'));
+  console.log(document.querySelector(`[data-id="${id}"]`));
   let nodeToDelete = document.querySelector('[data-id="' + id + '"]');
   nodeToDelete.remove();
 }
+
 // function redrawList() {
 //   todosActive = document.getElementById('todos_active');
 //   todosDone = document.getElementById('todos_done');
