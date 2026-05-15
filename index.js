@@ -1,23 +1,23 @@
-// todos list is Array
-let todosSaved = [
-  { id: crypto.randomUUID(), text: 'one task', done: false },
-  { id: crypto.randomUUID(), text: '3 one task', done: true },
-  { id: crypto.randomUUID(), text: '4 one task', done: false },
-];
+'use strict';
+const LOCAL_STORAGE_ID = 'my_todos';
 
 let todosActiveContainerDiv;
 let todosDoneContainerDiv;
+let todosSaved = [];
 
 let bodyOnLoadPromise = new Promise((resolve) => {
-  document.body.onload = () => {
+  document.addEventListener('DOMContentLoaded', () => {
     resolve('loaded');
-  };
+  });
 });
 
 (async () => {
   await bodyOnLoadPromise.then((val) => console.log(val));
   todosActiveContainerDiv = document.getElementById('todos_active');
   todosDoneContainerDiv = document.getElementById('todos_done');
+
+  loadFromLocalStorage();
+
   for (let todo of todosSaved) {
     newTodo(todo, todo.done ? todosDoneContainerDiv : todosActiveContainerDiv);
   }
@@ -25,9 +25,10 @@ let bodyOnLoadPromise = new Promise((resolve) => {
 
 function newTodo(todoData, container) {
   if (todoData == undefined) {
-    todoData = { id: crypto.randomUUID(), done: false, text: '...' };
+    todoData = { id: crypto.randomUUID(), done: false };
     todosSaved.unshift(todoData);
     container = todosActiveContainerDiv;
+    saveToLocalStorage();
   }
 
   let newTodo = document.createElement('div');
@@ -46,22 +47,24 @@ function newTodo(todoData, container) {
 
   let todoText = document.createElement('input');
   Object.assign(todoText, {
+    placeholder: "what's the task ?",
     name: 'Text',
     value: todoData.text != undefined ? todoData.text : '',
     type: 'text',
     onchange: (evt) => {
-      changeTodoText(evt.target.dataId, evt.target.value);
+      changeTodoText(evt.target.dataset.id, evt.target.value);
     },
   });
+  todoText.dataset.id = todoData.id;
 
   let deleteButton = document.createElement('button');
   Object.assign(deleteButton, {
-    dataId: todoData.id,
     innerHTML: 'x',
     onclick: () => {
       deleteTodo(todoData.id);
     },
   });
+  deleteButton.dataset.id = todoData.id;
   newTodo.appendChild(checkBox);
   newTodo.appendChild(todoText);
   newTodo.appendChild(deleteButton);
@@ -88,6 +91,7 @@ function setDoneTodo(id) {
   } else {
     todosActiveContainerDiv.appendChild(todoNode);
   }
+  saveToLocalStorage();
 }
 
 function deleteTodo(id) {
@@ -95,6 +99,7 @@ function deleteTodo(id) {
   console.log(document.querySelector(`[data-id="${id}"]`));
   let nodeToDelete = document.querySelector('[data-id="' + id + '"]');
   nodeToDelete.remove();
+  saveToLocalStorage();
 }
 
 // function redrawList() {
@@ -105,3 +110,33 @@ function deleteTodo(id) {
 //     newTodo(todo, todo.done ? todosDone : todosActive);
 //   }
 // }
+
+function loadFromLocalStorage() {
+  todosSaved = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_ID)) || [];
+  console.log(todosSaved);
+}
+function saveToLocalStorage() {
+  window.localStorage.setItem(LOCAL_STORAGE_ID, JSON.stringify(todosSaved));
+}
+
+let color = 'blue';
+function getChangeColor() {
+  let color = 'red';
+  return function () {
+    console.log(this);
+    console.log(color);
+  };
+}
+
+let changeColor = getChangeColor();
+changeColor();
+
+console.log('1');
+setTimeout(() => {
+  console.log('3');
+}, 0);
+Promise.resolve().then(() => {
+  console.log('2');
+});
+
+console.log('4');
